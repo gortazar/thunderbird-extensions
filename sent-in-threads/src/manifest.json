@@ -2,9 +2,9 @@
   "manifest_version": 3,
   "name": "__MSG_extensionName__",
   "description": "__MSG_extensionDescription__",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "author": "Patxi Gortázar",
-  "homepage_url": "https://github.com/gortazar/thunderbird-read-thread",
+  "homepage_url": "https://github.com/gortazar/thunderbird-extensions/tree/main/sent-in-threads",
   "default_locale": "en",
   "browser_specific_settings": {
     "gecko": {

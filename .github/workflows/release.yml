@@ -1,0 +1,54 @@
+name: Build and release
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build every extension
+        run: |
+          set -e
+          for manifest in */src/manifest.json; do
+            ext=${manifest%%/*}
+            echo "::group::$ext"
+            python3 -m json.tool "$manifest" > /dev/null
+            sh "$ext/build.sh"
+            echo "::endgroup::"
+          done
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xpi
+          path: "*/dist/*.xpi"
+
+      - name: Publish releases for new versions
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -e
+          for manifest in */src/manifest.json; do
+            ext=${manifest%%/*}
+            version=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["version"])' "$manifest")
+            tag="$ext-v$version"
+            if gh release view "$tag" > /dev/null 2>&1; then
+              echo "$tag already released"
+              continue
+            fi
+            xpi=$(ls "$ext"/dist/*-"$version".xpi)
+            notes=$(git log -1 --format='%s%n%n%b' -- "$ext")
+            gh release create "$tag" "$xpi" \
+              --target "$GITHUB_SHA" \
+              --title "$ext $version" \
+              --notes "$notes"
+          done
