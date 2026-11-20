@@ -152,6 +152,18 @@ describe("listRooms", () => {
     await expect(meet.listRooms(SETTINGS, fetchMock)).rejects.toThrow(/\/meet/);
   });
 
+  test("rejects a 200 that is not JSON (server URL without /meet)", async () => {
+    const fetchMock = jest.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => {
+        throw new SyntaxError("Unexpected end of JSON input");
+      },
+    });
+    await expect(meet.listRooms(SETTINGS, fetchMock)).rejects.toThrow(/\/meet/);
+    await expect(meet.createRoom(SETTINGS, "x", {}, fetchMock)).rejects.toThrow(/\/meet/);
+  });
+
   test("includes the server message for other errors", async () => {
     const fetchMock = jest.fn().mockResolvedValue(
       jsonResponse(422, { error: "Unprocessable Entity", message: "Invalid request" }));

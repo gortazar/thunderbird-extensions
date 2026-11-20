@@ -154,6 +154,14 @@ async function meetRequest(settings, method, path, body, fetchImpl) {
   if (!response.ok) {
     throw new MeetApiError(response.status, describeHttpError(response.status, data));
   }
+  // Without the base path, some deployments answer 200 with an empty or HTML
+  // body instead of a 404, so a successful call must still return JSON.
+  if (data === null || typeof data !== "object") {
+    throw new MeetApiError(
+      response.status,
+      "The server did not answer like the OpenVidu Meet API. Check the server URL; it usually ends in /meet."
+    );
+  }
   return data;
 }
 

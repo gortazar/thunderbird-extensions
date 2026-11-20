@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "OpenVidu Meet",
   "description": "Create OpenVidu Meet rooms, insert their links in your messages and join meetings from Thunderbird.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": "Patxi Gortázar",
   "homepage_url": "https://github.com/gortazar/thunderbird-extensions/tree/main/openvidu-meet",
   "browser_specific_settings": {
