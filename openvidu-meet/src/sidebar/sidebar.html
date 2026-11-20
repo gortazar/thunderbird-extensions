@@ -12,21 +12,28 @@
         <span>OpenVidu Meet</span>
       </div>
       <div class="header-actions">
+        <button id="new-btn" title="New room" aria-label="New room" class="icon-btn">+</button>
         <button id="refresh-btn" title="Refresh rooms" aria-label="Refresh rooms" class="icon-btn">&#x21BB;</button>
         <button id="settings-btn" title="Settings" aria-label="Settings" class="icon-btn">&#x2699;</button>
       </div>
     </div>
 
+    <form id="new-form" class="new-form hidden">
+      <input id="new-name" maxlength="50" placeholder="Room name" autocomplete="off" required />
+      <button type="submit" id="new-submit">Create</button>
+    </form>
+
     <div id="status-message" class="status-message" role="status" aria-live="polite"></div>
 
-    <ul id="rooms-list" class="rooms-list" role="list" aria-label="Available rooms"></ul>
+    <ul id="rooms-list" class="rooms-list" aria-label="Rooms"></ul>
 
     <div id="empty-state" class="empty-state hidden">
-      <p>No rooms found.</p>
-      <p class="hint">Rooms are listed once your OpenVidu Meet server is configured and rooms exist.</p>
+      <p>No rooms yet.</p>
+      <p class="hint">Create one with <strong>+</strong>, or from the <em>Meet link</em> button of the compose window.</p>
     </div>
 
-    <script src="../src/lib/rooms.js"></script>
+    <script src="../lib/meet.js"></script>
+    <script src="../lib/settings.js"></script>
     <script src="sidebar.js"></script>
   </body>
 </html>

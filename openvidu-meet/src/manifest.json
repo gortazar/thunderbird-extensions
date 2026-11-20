@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "OpenVidu Meet",
+  "description": "Create OpenVidu Meet rooms, insert their links in your messages and join meetings from Thunderbird.",
+  "version": "1.1.0",
+  "author": "Patxi Gortázar",
+  "homepage_url": "https://github.com/gortazar/thunderbird-extensions/tree/main/openvidu-meet",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "openvidu-meet-provisioner@thunderbird",
+      "strict_min_version": "128.0"
+    }
+  },
+  "icons": {
+    "32": "icons/icon.svg",
+    "64": "icons/icon.svg"
+  },
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "compose_action": {
+    "default_title": "OpenVidu Meet",
+    "default_label": "Meet link",
+    "default_icon": "icons/icon.svg",
+    "default_popup": "compose/popup.html"
+  },
+  "options_ui": {
+    "page": "options/options.html",
+    "open_in_tab": true
+  },
+  "permissions": [
+    "compose",
+    "scripting",
+    "storage",
+    "clipboardWrite"
+  ],
+  "optional_host_permissions": [
+    "https://*/*",
+    "http://*/*"
+  ]
+}

@@ -4,4 +4,5 @@
 - Every change to an extension is a new **minor** release (bump `version` in its
   `manifest.json`) unless the user says otherwise. Pushing to `main` makes the
   `Build and release` workflow publish `<extension>-v<version>` with the `.xpi`.
+- If an extension has a `package.json`, run `npm test` in its folder before pushing; CI runs it too.
 - Changes that don't touch an extension (CI, top-level docs) need no bump.

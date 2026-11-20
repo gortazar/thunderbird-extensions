@@ -5,6 +5,7 @@ Thunderbird add-ons, one per folder.
 | Extension | Description |
 |-----------|-------------|
 | [sent-in-threads](sent-in-threads/) | Shows your sent replies inside the conversation threads of the Inbox (or wherever the conversation lives). |
+| [openvidu-meet](openvidu-meet/) | Creates OpenVidu Meet rooms, inserts their links in messages and joins meetings from Thunderbird. |
 
 ## Layout
 
@@ -13,6 +14,7 @@ Each extension folder contains:
 - `src/` – the add-on source (`manifest.json` lives here)
 - `build.sh` – packs `src/` into `dist/<id>-<version>.xpi`
 - `README.md` – what it does and how to use it
+- `package.json` + `tests/` (optional) – if present, CI runs `npm ci && npm test` before building
 
 ## Releases
 
@@ -29,4 +31,4 @@ then in Thunderbird: *Tools → Add-ons and Themes → ⚙ → Install Add-on Fr
 
 ## License
 
-MIT
+MIT, unless an extension folder has its own `LICENSE` (openvidu-meet is Apache-2.0).

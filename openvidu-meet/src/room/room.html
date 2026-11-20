@@ -12,12 +12,10 @@
         <span id="room-title" class="room-title">Loading…</span>
       </div>
       <div class="toolbar-right">
-        <button id="open-external-btn" class="toolbar-btn" title="Open in browser">
+        <button id="open-external-btn" class="toolbar-btn" title="Open in your web browser">
           &#x2197; Open in browser
         </button>
-        <button id="close-btn" class="toolbar-btn" title="Close tab">
-          &#x2715; Close
-        </button>
+        <button id="close-btn" class="toolbar-btn" title="Close tab">&#x2715; Close</button>
       </div>
     </div>
 
@@ -25,23 +23,19 @@
       <iframe
         id="room-frame"
         class="room-frame"
-        allow="camera; microphone; display-capture; autoplay; clipboard-write; encrypted-media; fullscreen"
+        allow="camera; microphone; display-capture; fullscreen; autoplay; compute-pressure; clipboard-write"
         allowfullscreen
       ></iframe>
       <div id="error-overlay" class="error-overlay hidden">
         <div class="error-box">
           <h2>&#x26A0; Cannot load room</h2>
           <p id="error-message"></p>
-          <p>
-            <a id="direct-link" href="#" target="_blank" rel="noopener noreferrer">
-              Open room directly in browser
-            </a>
-          </p>
         </div>
       </div>
     </div>
 
-    <script src="../src/lib/url.js"></script>
+    <script src="../lib/meet.js"></script>
+    <script src="../lib/settings.js"></script>
     <script src="room.js"></script>
   </body>
 </html>

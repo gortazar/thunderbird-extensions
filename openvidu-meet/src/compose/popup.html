@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>OpenVidu Meet</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <section id="setup" class="hidden">
+      <p id="setup-message">Configure your OpenVidu Meet server first.</p>
+      <button type="button" id="open-settings">Open settings</button>
+    </section>
+
+    <section id="main" class="hidden">
+      <form id="create-form">
+        <label for="room-name">New room</label>
+        <div class="row">
+          <input id="room-name" maxlength="50" autocomplete="off" spellcheck="false" required />
+          <button type="submit" id="create-btn">Create &amp; insert link</button>
+        </div>
+        <p id="deletion-hint" class="hint"></p>
+      </form>
+
+      <div class="existing">
+        <label for="filter">Or insert a link to an existing room</label>
+        <input id="filter" type="search" placeholder="Filter rooms" autocomplete="off" />
+        <ul id="rooms" class="rooms" aria-label="Rooms"></ul>
+      </div>
+    </section>
+
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+
+    <script src="../lib/meet.js"></script>
+    <script src="../lib/settings.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

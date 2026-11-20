@@ -1,5 +1,5 @@
 /* =========================================================
-   Sidebar – OpenVidu Meet Provisioner
+   Sidebar – OpenVidu Meet
    ========================================================= */
 
 *, *::before, *::after {
@@ -101,6 +101,29 @@ body {
   color: #555e68;
 }
 
+/* ---- New room form ---- */
+.new-form {
+  display: flex;
+  gap: 6px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--splitter-color, #d0d0d0);
+}
+
+.new-form input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  padding: 4px 6px;
+}
+
+.new-form button {
+  font: inherit;
+}
+
+.new-form.hidden {
+  display: none;
+}
+
 /* ---- Rooms list ---- */
 .rooms-list {
   list-style: none;
@@ -112,28 +135,42 @@ body {
 
 .room-item {
   display: flex;
-  flex-direction: column;
-  padding: 9px 12px;
-  cursor: pointer;
+  align-items: center;
   border-bottom: 1px solid var(--splitter-color, #e8e8e8);
-  transition: background 0.1s;
-  user-select: none;
+  padding-right: 6px;
 }
 
 .room-item:last-child {
   border-bottom: none;
 }
 
-.room-item:hover {
+.room-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  padding: 9px 12px;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.room-main:hover:not(:disabled) {
   background: rgba(0, 96, 223, 0.07);
 }
 
-.room-item:active {
-  background: rgba(0, 96, 223, 0.13);
+.room-main:disabled {
+  cursor: default;
+  opacity: 0.7;
 }
 
-/* Closed room name – normal weight */
 .room-name {
+  max-width: 100%;
   font-size: 13px;
   font-weight: 400;
   white-space: nowrap;
@@ -141,21 +178,8 @@ body {
   text-overflow: ellipsis;
 }
 
-/* Open room name – bold */
-.room-item.room-open .room-name {
+.room-active_meeting .room-name {
   font-weight: 700;
-}
-
-.room-status-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 3px;
-}
-
-.room-participants {
-  font-size: 11px;
-  color: #6c757d;
 }
 
 .room-badge {
@@ -167,15 +191,24 @@ body {
   letter-spacing: 0.04em;
 }
 
-.badge-open {
-  /* Thunderbird success green */
+.badge-active_meeting {
   background: #d0ffd8;
   color: #006613;
+}
+
+.badge-open {
+  background: #deeafc;
+  color: #0250bb;
 }
 
 .badge-closed {
   background: #e4e4e7;
   color: #52525b;
+}
+
+.status-message.success {
+  padding: 8px 12px;
+  color: #006613;
 }
 
 /* ---- Empty state ---- */

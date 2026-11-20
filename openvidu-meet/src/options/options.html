@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>OpenVidu Meet – Settings</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <div class="page-wrapper">
+      <header class="page-header">
+        <img src="../icons/icon.svg" class="logo" alt="" />
+        <div>
+          <h1>OpenVidu Meet</h1>
+          <p class="subtitle">Connect Thunderbird to your OpenVidu Meet server</p>
+        </div>
+      </header>
+
+      <form id="settings-form" novalidate>
+        <fieldset>
+          <legend>Server</legend>
+          <div class="form-group">
+            <label for="server-url">Server URL <span class="required">*</span></label>
+            <input type="url" id="server-url" placeholder="https://meet.example.com/meet"
+                   autocomplete="off" spellcheck="false" required />
+            <p class="field-hint">
+              The address of OpenVidu Meet, including its base path (<code>/meet</code> by default),
+              e.g. <code>https://openvidu.example.com/meet</code>.
+            </p>
+          </div>
+          <div class="form-group">
+            <label for="api-key">API key <span class="required">*</span></label>
+            <input type="password" id="api-key" autocomplete="off" spellcheck="false" />
+            <p class="field-hint">
+              Generate it in OpenVidu Meet → <em>Embedded</em> → <em>Generate API Key</em>.
+              It is sent only to your server, in the <code>X-API-KEY</code> header.
+              <strong>It grants full control over every room</strong>, so use it only on
+              computers you trust.
+            </p>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Meetings</legend>
+          <div class="form-group">
+            <label for="participant-name">Your display name</label>
+            <input type="text" id="participant-name" placeholder="Jane Smith" autocomplete="off" />
+            <p class="field-hint">Used when you join a room from Thunderbird.</p>
+          </div>
+          <div class="form-group">
+            <label for="auto-deletion-days">Delete rooms created from messages after (days)</label>
+            <input type="number" id="auto-deletion-days" min="0" max="3650" step="1" />
+            <p class="field-hint">0 keeps them until you delete them. Rooms created from the sidebar are always kept.</p>
+          </div>
+        </fieldset>
+
+        <div class="form-actions">
+          <button type="submit" id="save-btn">Save settings</button>
+          <button type="button" id="test-btn">Test connection</button>
+          <span id="save-status" class="save-status" aria-live="polite"></span>
+        </div>
+      </form>
+
+      <section class="help-section">
+        <h2>How to use it</h2>
+        <p>
+          <strong>In a message:</strong> click <em>Meet link</em> in the compose toolbar to create a
+          room named after the subject and insert its guest link, or to insert the link of an
+          existing room.
+        </p>
+        <p>
+          <strong>Joining:</strong> open the OpenVidu Meet space in the left toolbar and click a room
+          to join it as host. The ⧉ button copies its guest link.
+        </p>
+      </section>
+    </div>
+
+    <script src="../lib/meet.js"></script>
+    <script src="../lib/settings.js"></script>
+    <script src="options.js"></script>
+  </body>
+</html>

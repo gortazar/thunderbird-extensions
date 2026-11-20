@@ -15,13 +15,20 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Build every extension
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+
+      - name: Test and build every extension
         run: |
           set -e
           for manifest in */src/manifest.json; do
             ext=${manifest%%/*}
             echo "::group::$ext"
             python3 -m json.tool "$manifest" > /dev/null
+            if [ -f "$ext/package.json" ]; then
+              (cd "$ext" && npm ci --no-audit --no-fund && npm test)
+            fi
             sh "$ext/build.sh"
             echo "::endgroup::"
           done

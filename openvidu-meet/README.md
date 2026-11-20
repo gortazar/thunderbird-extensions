@@ -1,123 +1,75 @@
-# thunderbird-openvidu-meet-provisioner
+# OpenVidu Meet for Thunderbird
 
-A Thunderbird WebExtension that integrates [OpenVidu Meet](https://openvidu.io/latest/meet/) videoconference rooms directly into Thunderbird.
+A Thunderbird add-on for [OpenVidu Meet](https://openvidu.io/latest/meet/):
+create meeting rooms, put their links in your messages and join meetings
+without leaving Thunderbird.
 
 ## Features
 
-- **Sidebar panel** – lists all available rooms from a deployed OpenVidu Meet server.
-- **Open rooms in bold** – rooms that currently have active participants are shown in **bold** so they are easy to spot.
-- **One-click join** – click any room in the sidebar to open the OpenVidu Meet UI embedded inside a new Thunderbird content tab.
-- **Auto-refresh** – the room list refreshes automatically every 30 seconds and whenever the sidebar becomes visible.
-- **"Open in browser" button** – in case the embedded iframe is restricted by the server's Content Security Policy, a button lets the user open the room directly in the default browser.
-- **Test connection** – the settings page lets you verify that the server URL and credentials are correct before using the sidebar.
+- **Meet link button in the compose window.** It creates a room named after the
+  message subject and inserts its guest link at the cursor. It can also insert
+  the link of an existing room. Rooms created this way are deleted
+  automatically after 30 days by default (configurable).
+- **OpenVidu Meet space** in the left toolbar. It lists your rooms, with meetings
+  in progress first. Click a room to join it as host in a Thunderbird tab, use
+  **⧉** to copy its guest link, and **+** to create a room.
+- **Open in browser.** If camera or microphone access does not work inside
+  Thunderbird, open the meeting in your default browser from the tab toolbar.
 
-## Prerequisites
+Guests get the room's anonymous **speaker** link; you join with the
+**moderator** link. Both come from the room's `access.anonymous` links in the
+OpenVidu Meet REST API.
 
-- Thunderbird 78 or later (WebExtension support).
-- An already-deployed instance of [OpenVidu Meet](https://openvidu.io/latest/meet/).
-- The LiveKit / OpenVidu API key and secret if you want to list all rooms (admin access).
+## Requirements
 
-## Installation
+- Thunderbird 128 or later.
+- An OpenVidu Meet deployment (tested against the 3.9 REST API) and an API key:
+  in OpenVidu Meet, go to **Embedded → Generate API Key**.
 
-### From source
+> **Security:** the API key gives full control over every room on the server.
+> It is stored in Thunderbird's local extension storage and sent only to your
+> server. Use the add-on only on computers you trust.
 
-1. Clone or download this repository.
-2. Open Thunderbird and navigate to  
-   **Tools → Add-ons and Themes → Extensions**.
-3. Click the gear icon (⚙) and choose **Debug Add-ons**.
-4. Click **Load Temporary Add-on…** and select the `manifest.json` file from this repository.
+## Setup
 
-### Packaging as `.xpi`
+1. Install the `.xpi` from the
+   [releases page](https://github.com/gortazar/thunderbird-extensions/releases)
+   (*Tools → Add-ons and Themes → ⚙ → Install Add-on From File…*).
+2. In the settings page that opens, enter:
+   - **Server URL**, including the Meet base path, e.g.
+     `https://openvidu.example.com/meet`.
+   - **API key**.
+   - Optionally, your display name and how many days rooms created from
+     messages are kept.
+3. Click **Save settings** and allow Thunderbird to access your server when it
+   asks. The add-on only gets access to that one server.
 
-```bash
-cd thunderbird-openvidu-meet-provisioner
-zip -r openvidu-meet-provisioner.xpi . \
-  --exclude ".git/*" "*.md" "*.xpi"
+## Development
+
+```sh
+npm install
+npm test          # unit tests (Jest)
+./build.sh        # creates dist/openvidu-meet-<version>.xpi
 ```
 
-The resulting `.xpi` file can be installed via  
-**Tools → Add-ons and Themes → Install Add-on From File…**.
+To try changes without packaging: *Tools → Add-ons and Themes → ⚙ → Debug
+Add-ons → Load Temporary Add-on…* and pick `src/manifest.json`.
 
-## Configuration
+| Path | Contents |
+|------|----------|
+| `src/lib/meet.js` | REST API client and helpers (shared, unit tested) |
+| `src/lib/settings.js` | Settings and host permission helpers |
+| `src/compose/` | Compose window popup |
+| `src/sidebar/` | OpenVidu Meet space |
+| `src/room/` | Tab that embeds a meeting |
+| `src/options/` | Settings page |
 
-After installation the settings page opens automatically.  You can also reach it at any time by clicking the **⚙** button in the sidebar panel.
-
-| Setting | Description |
-|---|---|
-| **Server URL** | Base URL of your OpenVidu Meet deployment, e.g. `https://meet.example.com`. |
-| **API Key** | OpenVidu Meet API key (admin credentials). Sent as the `X-API-KEY` header to authenticate REST API calls. |
-| **Your display name** | The name shown to other participants when you join a room. Defaults to "Guest". |
-
-All settings are stored locally inside Thunderbird and are never transmitted anywhere other than your configured server.
-
-## Usage
-
-1. Open the sidebar: **View → Sidebar → OpenVidu Meet**  
-   (or use the keyboard shortcut assigned to that sidebar).
-2. The sidebar lists all rooms returned by `GET /api/v1/rooms`.  
-   Rooms with active participants are shown **in bold** with a green "Open" badge.
-3. Click a room to join: a new Thunderbird content tab opens with the OpenVidu Meet UI embedded in an `<iframe>`.
-4. Use the **↻** button in the sidebar header to refresh the list manually.
-5. If the room cannot be embedded (e.g. CSP restrictions), use the  
-   **↗ Open in browser** button inside the tab to open the room in the default browser.
-
-## Extension structure
-
-```
-manifest.json          – WebExtension manifest
-background.js          – Background script (handles tab creation)
-icons/
-  icon.svg             – Extension icon
-sidebar/
-  sidebar.html         – Left-panel room list
-  sidebar.js           – Room fetching, rendering and auto-refresh
-  sidebar.css          – Sidebar styles
-content/
-  room.html            – Embedded room page (opened as a Thunderbird tab)
-  room.js              – Builds the room URL and loads it in an iframe
-  room.css             – Styles for the embedded room page
-options/
-  options.html         – Settings page
-  options.js           – Settings load/save and connection test
-  options.css          – Settings page styles
-```
-
-## OpenVidu Meet REST API
-
-The extension calls:
-
-```
-GET {serverUrl}/api/v1/rooms
-X-API-KEY: {apiKey}
-```
-
-The response is `{ "rooms": [...], "pagination": {...} }`.
-
-Each room object contains:
-- `roomId` – unique room identifier
-- `roomName` – display name of the room
-- `status` – `"open"`, `"active_meeting"`, or `"closed"` (used to determine "open" status)
-
-Legacy response shapes from older API versions are also handled:
-- A JSON array of room objects
-- `{ "content": [...] }` (Spring-Page format)
-
-Legacy room fields are also handled for backwards compatibility:
-- `name` or `id` – legacy room identifier
-- `numParticipants` / `num_participants` / `participantCount` – legacy participant count
-- `activeRecording` (optional) – legacy boolean "open" indicator
-
-## Embedding
-
-Rooms are embedded using an `<iframe>` pointed at:
-
-```
-{serverUrl}/#/{roomName}
-```
-
-This is the standard hash-routing URL used by OpenVidu Meet.  
-See the [embedding documentation](https://openvidu.io/latest/meet/embedded/intro/) for advanced options such as the OpenVidu web component.
+This add-on was previously published as
+[thunderbird-openvidu-meet-provisioner](https://github.com/gortazar/thunderbird-openvidu-meet-provisioner)
+(v1.0.x). It keeps the same add-on ID, so existing installations update in
+place. After updating, add `/meet` to the server URL if your server uses the
+default base path.
 
 ## License
 
-Apache License 2.0 – see [LICENSE](LICENSE).
+[Apache-2.0](LICENSE)
