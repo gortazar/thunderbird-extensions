@@ -204,16 +204,16 @@ function escapeHtml(text) {
 }
 
 /**
- * Text inserted into a message to invite people to a room.
+ * Text inserted into a message to invite people to a room. In HTML messages
+ * only the room name is shown, linked to the room; plain-text messages need
+ * the URL itself.
  * @returns {{html: string, text: string}}
  */
 function invitationSnippet(roomName, url) {
   const label = "Join the video call";
   return {
     text: label + " (" + roomName + "): " + url,
-    html:
-      "<p>" + label + ": <a href=\"" + escapeHtml(url) + "\">" +
-      escapeHtml(roomName) + "</a><br>" + escapeHtml(url) + "</p>",
+    html: "<p>" + label + ": <a href=\"" + escapeHtml(url) + "\">" + escapeHtml(roomName) + "</a></p>",
   };
 }
 

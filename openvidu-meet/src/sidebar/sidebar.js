@@ -1,5 +1,5 @@
-/* global browser, loadSettings, isConfigured, hasServerPermission, listRooms, createRoom,
-   roomLinks, roomStatus, roomDisplayName, sortRooms, isSafeRoomUrl */
+/* global browser, messenger, loadSettings, isConfigured, hasServerPermission, listRooms, createRoom,
+   roomLinks, roomStatus, roomDisplayName, sortRooms, isSafeRoomUrl, withParticipantName */
 "use strict";
 
 const $ = (id) => document.getElementById(id);
@@ -22,11 +22,9 @@ function joinRoom(room) {
     setStatus("This room has no host link (anonymous moderator access is disabled).", "error");
     return;
   }
-  const page =
-    browser.runtime.getURL("room/room.html") +
-    "?" +
-    new URLSearchParams({ url, name: roomDisplayName(room) });
-  browser.tabs.create({ url: page });
+  // Camera and microphone do not work inside Thunderbird tabs, so meetings
+  // open in the default web browser.
+  messenger.windows.openDefaultBrowser(withParticipantName(url, settings.participantName));
 }
 
 async function copyGuestLink(room) {
@@ -51,7 +49,7 @@ function buildRoomItem(room) {
   const main = document.createElement("button");
   main.className = "room-main";
   main.disabled = status === "closed";
-  main.title = status === "closed" ? "Room closed" : "Join as host";
+  main.title = status === "closed" ? "Room closed" : "Join as host in your web browser";
   main.addEventListener("click", () => joinRoom(room));
 
   const name = document.createElement("span");

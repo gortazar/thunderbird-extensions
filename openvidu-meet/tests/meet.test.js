@@ -205,6 +205,14 @@ describe("createRoom", () => {
 });
 
 describe("invitationSnippet", () => {
+  test("HTML shows only the room name, linked to the room", () => {
+    const url = SERVER + "/room/x?secret=1";
+    const s = meet.invitationSnippet("Weekly sync", url);
+    expect(s.html).toBe('<p>Join the video call: <a href="' + url.replace(/&/g, "&amp;") + '">Weekly sync</a></p>');
+    expect(s.text).toBe("Join the video call (Weekly sync): " + url);
+  });
+
+
   test("escapes HTML in names and URLs", () => {
     const s = meet.invitationSnippet("<b>Q&A</b>", SERVER + "/room/x?secret=1&a=\"2\"");
     expect(s.html).not.toContain("<b>");

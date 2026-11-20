@@ -34,7 +34,7 @@ describe("manifest", () => {
 });
 
 describe("extension pages", () => {
-  const pages = ["compose/popup.html", "sidebar/sidebar.html", "room/room.html", "options/options.html"];
+  const pages = ["compose/popup.html", "sidebar/sidebar.html", "options/options.html"];
 
   test.each(pages)("%s only loads local scripts that exist", (page) => {
     const html = fs.readFileSync(path.join(SRC, page), "utf8");

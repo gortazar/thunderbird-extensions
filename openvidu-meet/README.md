@@ -7,14 +7,14 @@ without leaving Thunderbird.
 ## Features
 
 - **Meet link button in the compose window.** It creates a room named after the
-  message subject and inserts its guest link at the cursor. It can also insert
+  message subject and inserts a link to it at the cursor (the room name, linked
+  to the guest URL; plain-text messages get the URL itself). It can also insert
   the link of an existing room. Rooms created this way are deleted
   automatically after 30 days by default (configurable).
 - **OpenVidu Meet space** in the left toolbar. It lists your rooms, with meetings
-  in progress first. Click a room to join it as host in a Thunderbird tab, use
-  **⧉** to copy its guest link, and **+** to create a room.
-- **Open in browser.** If camera or microphone access does not work inside
-  Thunderbird, open the meeting in your default browser from the tab toolbar.
+  in progress first. Click a room to join it as host in your default web
+  browser (camera and microphone do not work inside Thunderbird), use **⧉** to
+  copy its guest link, and **+** to create a room.
 
 Guests get the room's anonymous **speaker** link; you join with the
 **moderator** link. Both come from the room's `access.anonymous` links in the
@@ -61,7 +61,6 @@ Add-ons → Load Temporary Add-on…* and pick `src/manifest.json`.
 | `src/lib/settings.js` | Settings and host permission helpers |
 | `src/compose/` | Compose window popup |
 | `src/sidebar/` | OpenVidu Meet space |
-| `src/room/` | Tab that embeds a meeting |
 | `src/options/` | Settings page |
 
 This add-on was previously published as
